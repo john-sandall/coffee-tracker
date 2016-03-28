@@ -15,37 +15,13 @@ def custom_strftime(format, t):
 @python_2_unicode_compatible  # only if you need to support Python 2
 class Brew(models.Model):
     def __str__(self):
-        return "{0} ({1})".format(self.vendor, custom_strftime('%a {S} %B', self.brew_date))
+        return "{0} ({1})".format(self.bean.vendor, custom_strftime('%a {S} %B', self.brew_date))
 
     # Timescales
     brew_date = models.DateTimeField(default=timezone.now)
 
     # Beans
     bean = models.ForeignKey('Bean', on_delete=models.CASCADE)
-    vendor = models.CharField(max_length=200)  # e.g. Pact
-    name = models.CharField(max_length=200)  # e.g. Sertaeo Pulped Natural
-    grind = models.CharField(max_length=200)  # e.g. aeropress
-    country = models.CharField(max_length=200)  # e.g. Brazil
-    date_roasted = models.DateField(default=timezone.now)
-    date_ground = models.DateField(default=timezone.now)
-    ground_by = models.CharField(max_length=200)  # e.g. Eleni
-    hints_of = models.CharField(max_length=200)  # e.g. Hazeulnut & Milk Chocolate
-    roast_type = models.CharField(max_length=200)  # e.g. Medium Roast
-    producer = models.CharField(max_length=200)
-    process = models.CharField(max_length=200)
-    origin = models.CharField(max_length=200)
-    varietal = models.CharField(max_length=200)
-    altitude = models.CharField(max_length=200)
-    farmer_question = models.TextField()
-    farmer_answer = models.TextField()
-
-    # Vendor's tasting notes
-    tasting_notes_flavour = models.CharField(max_length=200)
-    tasting_notes_sweetness = models.CharField(max_length=200)
-    tasting_notes_acidity = models.CharField(max_length=200)
-    tasting_notes_mouthfeel = models.CharField(max_length=200)
-    pact_reviewer_name = models.CharField(max_length=200)
-    pact_reviewer_says = models.TextField()
 
     # Water
     water_type = models.CharField(max_length=200)  # e.g. tap water
