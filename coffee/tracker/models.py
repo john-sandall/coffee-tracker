@@ -21,6 +21,7 @@ class Brew(models.Model):
     brew_date = models.DateTimeField(default=timezone.now)
 
     # Beans
+    bean = models.ForeignKey('Bean', on_delete=models.CASCADE)
     vendor = models.CharField(max_length=200)  # e.g. Pact
     name = models.CharField(max_length=200)  # e.g. Sertaeo Pulped Natural
     grind = models.CharField(max_length=200)  # e.g. aeropress
@@ -47,7 +48,6 @@ class Brew(models.Model):
     pact_reviewer_says = models.TextField()
 
     # Water
-    kettle_boiled = models.BooleanField()
     water_type = models.CharField(max_length=200)  # e.g. tap water
     kettle_cooldown_time = models.IntegerField(default=0)
     water_temperature = models.IntegerField(default=0)
@@ -64,14 +64,46 @@ class Brew(models.Model):
     second_water_time = models.CharField(max_length=200)  # e.g. 20 seconds
     plunge_time = models.CharField(max_length=200)  # e.g. 60 seconds
     plunge_into = models.CharField(max_length=200)  # e.g. cold cup
-    repour_into_mug = models.BooleanField()
-    hot_water_added = models.BooleanField()
-    milk_added = models.BooleanField()
-    sugar_added = models.BooleanField()
+    repour_into_mug = models.BooleanField(default=False)
+    hot_water_added = models.BooleanField(default=False)
+    milk_added = models.BooleanField(default=False)
+    sugar_added = models.BooleanField(default=False)
 
     # My tasting notes
     score = models.DecimalField(max_digits=2, decimal_places=1)  # e.g. 3.5 is "good to great"
     comments = models.TextField()
+
+
+@python_2_unicode_compatible  # only if you need to support Python 2
+class Bean(models.Model):
+    def __str__(self):
+        return "{0}, {1} ({2})".format(self.name, self.vendor, custom_strftime('%a {S} %B', self.date_roasted))
+
+    # Beans
+    vendor = models.CharField(max_length=200)  # e.g. Pact
+    name = models.CharField(max_length=200)  # e.g. Sertaeo Pulped Natural
+    grind = models.CharField(max_length=200)  # e.g. aeropress
+    country = models.CharField(max_length=200)  # e.g. Brazil
+    date_roasted = models.DateField(default=timezone.now)
+    date_ground = models.DateField(default=timezone.now)
+    ground_by = models.CharField(max_length=200)  # e.g. Eleni
+    hints_of = models.CharField(max_length=200)  # e.g. Hazeulnut & Milk Chocolate
+    roast_type = models.CharField(max_length=200)  # e.g. Medium Roast
+    producer = models.CharField(max_length=200)
+    process = models.CharField(max_length=200)
+    origin = models.CharField(max_length=200)
+    varietal = models.CharField(max_length=200)
+    altitude = models.CharField(max_length=200)
+    farmer_question = models.TextField()
+    farmer_answer = models.TextField()
+
+    # Vendor's tasting notes
+    tasting_notes_flavour = models.CharField(max_length=200)
+    tasting_notes_sweetness = models.CharField(max_length=200)
+    tasting_notes_acidity = models.CharField(max_length=200)
+    tasting_notes_mouthfeel = models.CharField(max_length=200)
+    pact_reviewer_name = models.CharField(max_length=200)
+    pact_reviewer_says = models.TextField()
 
 
 # @python_2_unicode_compatible  # only if you need to support Python 2
